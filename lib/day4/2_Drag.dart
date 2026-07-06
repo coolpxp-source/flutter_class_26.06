@@ -12,8 +12,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  double x = 150;
-  double y = 150 ;
+  // double x = 150;
+  // double y = 150 ;
+  Offset position = Offset(150, 150);
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +23,21 @@ class _MyAppState extends State<MyApp> {
         body: Stack(
           children: [
             Positioned(
-                top: y, left: x,
+                // top: y, left: x,
+                top: position.dy, left: position.dx,
                 child:GestureDetector(
+                  onTap: (){
+                    print(MediaQuery.of(context).size.width);
+                    print(MediaQuery.of(context).size.height);
+                  },
                   onPanUpdate: (e){
                     setState(() {
-                      x+= e.delta.dx;
-                      y+= e.delta.dy;
+                      // x+= e.delta.dx;
+                      // y+= e.delta.dy;
+                      // position => (150,150)
+                      // delta =>(2,3)
+                      // position + delta =>(152,153)
+                      position += e.delta;
                     });
                   },
                   child: Container(
