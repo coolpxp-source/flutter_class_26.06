@@ -43,20 +43,58 @@ class MyApp extends StatelessWidget {
      final snapshot =  
         await fs.collection("users")
                   // .where("age", isGreaterThan: 20) // age > 20
-                  .where("age", isGreaterThanOrEqualTo: 25) // age >= 25
+                  .where("age", isGreaterThanOrEqualTo: 20) // age >= 25
                   // .orderBy("age") // age 필드 기준으로 오름차순 정렬
                   .orderBy("age", descending: true) // age 필드 기준으로 내림차순 정렬
                   .get();
+     // snapshot.docs <-여러개의 개체 값을 가짐. json 형태
+     for(var doc in snapshot.docs){
+       Map<String, dynamic> user = doc.data();
+       print("문서 ID : ${doc.id}, 이름 : ${user["name"]}, 나이 : ${user["age"]}");
+     }
+    }
+    Future<void> updateUser() async{
+      await fs.collection("users").doc("qp83V3Ncz7uLrICmlNa0").update({
+        "name" : "박영희",
+        "age" : 25
+      });
+    }
+
+    Future<void> deleteUser() async{
+      await fs.collection("users").doc("abcd").delete();
     }
 
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: ElevatedButton(
-              onPressed: (){
-                addUser();
-              },
-              child: Text("클릭")
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: (){
+                    addUser();
+                  },
+                  child: Text("클릭")
+              ),
+              ElevatedButton(
+                  onPressed: (){
+                    getUserList();
+                  },
+                  child: Text("docs 버튼")
+              ),
+              ElevatedButton(
+                  onPressed: (){
+                    updateUser();
+                  },
+                  child: Text("수정 버튼")
+              ),
+              ElevatedButton(
+                  onPressed: (){
+                    deleteUser();
+                  },
+                  child: Text("삭제 버튼")
+              ),
+            ],
           ),
         ),
       ),
